@@ -1636,4 +1636,16 @@ public class FedoraNodesIT extends AbstractResourceIT {
         assertEquals("Linked to should still exist!", 200, getStatus(get));
     }
 
+    /**
+     * I should be able to create two subdirectories of a non-existent parent
+     * directory.
+    **/
+    @Test
+    public void testBreakFederation() throws Exception {
+        testGetRepositoryGraph();
+        createObject("files/a0/b0");
+        createObject("files/a0/b1");
+        testGetRepositoryGraph();
+    }
+
 }
