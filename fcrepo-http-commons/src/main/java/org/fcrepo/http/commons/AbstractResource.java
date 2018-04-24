@@ -34,7 +34,6 @@ import org.fcrepo.kernel.api.services.NodeService;
 import org.fcrepo.kernel.api.services.ContainerService;
 import org.fcrepo.kernel.api.services.VersionService;
 import org.fcrepo.kernel.api.services.functions.HierarchicalIdentifierSupplier;
-import org.fcrepo.kernel.api.services.functions.UniqueValueSupplier;
 
 import org.jvnet.hk2.annotations.Optional;
 
@@ -97,7 +96,7 @@ public class AbstractResource {
     @Optional
     protected Supplier<String> pidMinter;
 
-    protected UniqueValueSupplier defaultPidMinter = new DefaultPathMinter();
+    protected HierarchicalIdentifierSupplier defaultPidMinter = new DefaultPathMinter();
 
     /**
      * Convert a JAX-RS list of PathSegments to a JCR path

@@ -19,8 +19,8 @@ package org.fcrepo.kernel.api.services.functions;
 
 import static java.util.UUID.randomUUID;
 
-import java.util.stream.IntStream;
 import java.util.StringJoiner;
+import java.util.stream.IntStream;
 
 /**
  * Unique value minter that creates hierarchical IDs from a UUID
@@ -30,11 +30,8 @@ import java.util.StringJoiner;
  */
 public interface HierarchicalIdentifierSupplier extends UniqueValueSupplier {
 
-    static final int DEFAULT_LENGTH = 2;
-    static final int DEFAULT_COUNT = 4;
-
     /**
-     * Mint a unique identifier as a UUID
+     * Mint a unique non-hierarchical identifier by default
      *
      * @return uuid
      */
@@ -42,11 +39,30 @@ public interface HierarchicalIdentifierSupplier extends UniqueValueSupplier {
     default public String get() {
 
         final String s = randomUUID().toString();
-        final StringJoiner joiner = new StringJoiner("/", "", "/" + s);
+        return s;
+    }
 
-        IntStream.rangeClosed(0, DEFAULT_COUNT - 1)
-                 .forEach(x -> joiner.add(s.substring(x * DEFAULT_LENGTH, (x + 1) * DEFAULT_LENGTH)));
+    /**
+     * Mint a hierarchical identifier with parameters to control length and count of the pairtree. A count of ZERO
+     * will return a non-hierarchical identifier.
+     *
+     * @param length the desired length of pairtree parts
+     * @param count the desired number of pairtree parts
+     * @return uuid
+     */
+    default public String get(final int length, final int count) {
+        final String s = randomUUID().toString();
+        final String id;
 
-        return joiner.toString();
+        if (count > 0) {
+            final StringJoiner joiner = new StringJoiner("/", "", "/" + s);
+
+            IntStream.rangeClosed(0, count - 1)
+            .forEach(x -> joiner.add(s.substring(x * length, (x + 1) * length)));
+            id = joiner.toString();
+        } else {
+            id = s;
+        }
+        return id;
     }
 }

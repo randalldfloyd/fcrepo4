@@ -868,6 +868,8 @@ public class FedoraLdp extends ContentExposingResource {
     }
 
     private String mintNewPid(final String slug) {
+        final int DEFAULT_PAIRTREE_LENGTH = 0;
+        final int DEFAULT_PAIRTREE_COUNT = 0;
         String pid;
 
         if (slug != null && !slug.isEmpty()) {
@@ -875,7 +877,10 @@ public class FedoraLdp extends ContentExposingResource {
         } else if (pidMinter != null) {
             pid = pidMinter.get();
         } else {
-            pid = defaultPidMinter.get();
+            // TODO: Allow configuration properties to override to length and count
+            final int length = DEFAULT_PAIRTREE_LENGTH;
+            final int count = DEFAULT_PAIRTREE_COUNT;
+            pid = defaultPidMinter.get(length, count);
         }
         // reverse translate the proffered or created identifier
         LOGGER.trace("Using external identifier {} to create new resource.", pid);

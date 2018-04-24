@@ -1900,10 +1900,12 @@ public class FedoraLdpIT extends AbstractResourceIT {
      *
      * @throws IOException in case of IOException
      */
+    // @Ignore
     @Test
     public void testIngestOnPairtree() throws IOException {
-        //  Following the approach undertaken for FedoraExportIT#shouldRoundTripOnePairtree
-        final String objName = getLocation(postObjMethod());
+        final String parent = "123456/789/10";
+        executeAndClose(putObjMethod(parent));
+        final String objName = serverAddress + parent;
         final String pairtreeName = objName.substring(serverAddress.length(), objName.lastIndexOf('/'));
 
         try (final CloseableDataset dataset = getDataset(getObjMethod(pairtreeName))) {
